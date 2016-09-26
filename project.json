@@ -1,0 +1,23 @@
+{
+    "env": {
+        "dev": {
+            "siteURL": "",
+            "baseURL": "/",
+            "scriptURL": "/",
+            "assetsURL": "/assets/"
+        },
+        "staging": {
+            "siteURL": "",
+            "baseURL": "/",
+            "scriptURL": "/",
+            "assetsURL": "/assets/"
+        },
+        "live": {
+            "siteURL": "",
+            "baseURL": "/",
+            "scriptURL": "/",
+            "assetsURL": "/assets/"
+        }
+    },
+    "port": 3000
+}

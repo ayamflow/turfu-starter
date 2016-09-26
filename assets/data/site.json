@@ -1,0 +1,7 @@
+{
+    "meta": {
+        "title": "Base es6",
+        "description": "Gulp + rollup + babel + stylus",
+        "twitter": "@ayamflow"
+    }
+}

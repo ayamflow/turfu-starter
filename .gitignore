@@ -1,0 +1,10 @@
+.DS_Store
+.sass-cache/
+static/build
+static/assets
+static/index.*
+static/index
+node_modules/*
+!node_modules/gsap
+server/
+npm-debug.log
