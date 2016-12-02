@@ -1,69 +1,66 @@
-'use strict'
-
 import gulp from 'gulp'
 import watch from 'gulp-watch'
+import vinyl from 'vinyl-source-stream'
+import browserify from 'browserify'
+import watchify from 'watchify'
+import aliasify from 'aliasify'
+import envify from 'envify/custom'
+import pckg from '../../package.json'
+import project from '../../project.json'
 import opts from '../options'
-import rollup from 'rollup-stream'
-import sourcemaps from 'gulp-sourcemaps'
-import includePaths from 'rollup-plugin-includepaths'
-import babel from 'rollup-plugin-babel'
-import commonjs from 'rollup-plugin-commonjs'
-import nodeResolve from 'rollup-plugin-node-resolve'
-import rename from 'gulp-rename'
-import util from 'gulp-util'
-import source from 'vinyl-source-stream'
-import uglify from 'rollup-plugin-uglify'
-import buffer from 'vinyl-buffer'
-import html from 'rollup-plugin-html'
 
-let plugins = [
-    babel({
-        exclude: 'node_modules/**',
-        presets: [
-           ['es2015', {'modules': false}]
-        ],
-        plugins: [
-            'import-glob',
-            'external-helpers',
-            ['module-alias', [
-              {'src': './src/lib', 'expose': 'lib'},
-              {'src': './src/sections', 'expose': 'sections'},
-              {'src': './src/components', 'expose': 'components'}
-            ]]
-        ]
-    }),
-    html({
-        include: './src/**/*.html'
-    }),
-    nodeResolve({
-        jsnext: true
-    }),
-    includePaths({
-        paths: ['./src', './src/lib']
-    }),
-    commonjs()
-]
+gulp.task('scripts', () => {
+  let bundler = browserify({
+    entries: 'src/index.js',
+    cache: {},
+    packageCache: {},
+    fullPaths: opts.debug,
+    debug: opts.debug,
+    insertglobals: true // for globals like FB, YT...
+  })
 
-if (opts.minify) plugins.push(uglify())
+  if (opts.watch) {
+    bundler = watchify(bundler)
+    bundler.on('update', bundle)
+    watch(['package.json'], bundle) // Rebuild if changing stuff in package.json (like environments)
+    // watch(['src/svg/**/*.svg'], bundle)
+  }
 
-// "incremental" rollup cache for watch
-let cache
+  applyTransform(bundler)
 
-gulp.task('scripts', (done) => {
-    return rollup({
-        entry: './src/index.js',
-        sourceMap: true,
-        format: 'iife',
-        plugins: plugins
-    })
-    .on('bundle', (bundle) => {
-        cache = bundle
-    })
-    .pipe(source('index.js', './src'))
-    .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .on('error', util.log)
-    .pipe(rename('main.js'))
-    .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('static/build'))
+  return bundle()
+
+  function bundle() {
+    return bundler.bundle()
+      .on('error', onError)
+      .pipe(vinyl('main.js'))
+      .pipe(gulp.dest('static/build'))
+  }
 })
+
+function applyTransform(bundler) {
+/*
+    Pass some flags to the build
+
+    if (App.ENV === 'dev') { ... do something in dev mode ... }
+    if (App.ENV === 'live') { ... do something in live mode ... }
+
+    Any variable in project.json will be added here
+*/
+
+  const paths = project.env[opts.env]
+
+  bundler.transform('babelify', {
+    presets: ['es2015'],
+    plugins: ['transform-decorators-legacy']
+  })
+  bundler.transform(aliasify, pckg.aliasify)
+  bundler.transform(envify({
+    ENV: opts.env,
+    paths: paths
+  }))
+}
+
+function onError() {
+    console.warn('[Error]', arguments);
+}
