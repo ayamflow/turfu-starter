@@ -1,3 +1,5 @@
-'use strict';
+"use strict";
 
-export default 'test';
+export default function() {
+  console.log("test module!");
+}

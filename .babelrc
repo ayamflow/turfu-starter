@@ -1,0 +1,12 @@
+{
+    "presets": [
+       "@babel/preset-env",
+       "@emotion/babel-preset-css-prop"
+    ],
+    "env": {
+        "production": {
+            "presets": ["minify"]
+        }
+    },
+    "plugins": []
+}

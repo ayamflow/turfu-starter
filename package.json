@@ -4,52 +4,52 @@
   "description": "A project boilerplate for the web of the future. Le turfu.",
   "main": "index.js",
   "scripts": {
-    "start": "gulp server --watch",
-    "staging": "gulp build --env staging",
-    "live": "gulp build --env live"
+    "start": "webpack-dev-server --open --env.development",
+    "build": "npx webpack --env.production"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "aliasify": "^2.1.0",
-    "autoprefixer": "^6.4.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
-    "babel-preset-es2015": "^6.14.0",
-    "babelify": "^7.3.0",
-    "browser-sync": "^2.16.0",
-    "browserify": "^13.1.1",
-    "connect-modrewrite": "^0.9.0",
-    "defaults": "^1.0.3",
-    "envify": "^4.0.0",
-    "gulp": "^3.9.1",
-    "gulp-filter": "^4.0.0",
-    "gulp-plumber": "^1.1.0",
-    "gulp-postcss": "^6.2.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sourcemaps": "^1.6.0",
-    "gulp-stylus": "^2.5.0",
-    "gulp-template": "^4.0.0",
-    "gulp-util": "^3.0.7",
-    "gulp-watch": "^4.3.9",
-    "minimist": "^1.2.0",
-    "require-dir": "^0.3.0",
-    "rimraf": "^2.5.4",
-    "uglify-js": "^2.7.3",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
-    "watchify": "^3.7.0"
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/node": "^7.2.2",
+    "@babel/preset-env": "^7.3.1",
+    "@babel/register": "^7.0.0",
+    "@emotion/babel-preset-css-prop": "^10.0.7",
+    "babel-loader": "^8.0.5",
+    "babel-minify": "^0.5.0",
+    "clean-webpack-plugin": "^1.0.1",
+    "emotion": "^10.0.7",
+    "glslify": "^7.0.0",
+    "glslify-fancy-imports": "^1.0.1",
+    "glslify-hex": "^2.1.1",
+    "glslify-import": "^3.1.0",
+    "glslify-loader": "^2.0.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "husky": "^1.3.1",
+    "lint-staged": "^8.1.4",
+    "prettier": "^1.16.4",
+    "raw-loader": "^1.0.0",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.1.14",
+    "webpack-merge": "^4.2.1"
   },
   "dependencies": {
+    "animejs": "^3.0.1",
     "css-reset": "watsondg/css-reset",
-    "nk-css-utils": "^2.0.0",
-    "stylus-easing": "^1.0.0"
+    "nk-css-utils": "^2.0.0"
   },
-  "aliasify": {
-    "aliases": {
-      "sections": "./src/sections/",
-      "components": "./src/components/",
-      "lib": "./src/lib/"
-    },
-    "verbose": false
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

@@ -1,23 +1,12 @@
 {
-    "env": {
-        "dev": {
-            "siteURL": "",
-            "baseURL": "/",
-            "scriptURL": "/",
-            "assetsURL": "/assets/"
-        },
-        "staging": {
-            "siteURL": "",
-            "baseURL": "/",
-            "scriptURL": "/",
-            "assetsURL": "/assets/"
-        },
-        "live": {
-            "siteURL": "",
-            "baseURL": "/",
-            "scriptURL": "/",
-            "assetsURL": "/assets/"
-        }
-    },
-    "port": 3000
+  "siteURL": "",
+  "baseURL": "/",
+  "scriptURL": "/",
+  "assetsURL": "/assets/",
+  "meta": {
+    "title": "Title",
+    "description": "Description",
+    "twitter": "@twitter",
+    "siteURL": "siteURL"
+  }
 }
